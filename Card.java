@@ -1,6 +1,8 @@
-import java.awt.Image;
+
 import java.io.Serializable;
 import java.util.ArrayList;
+
+import javax.swing.ImageIcon;
 
 @SuppressWarnings("serial")
 public class Card implements Serializable{
@@ -10,7 +12,9 @@ public class Card implements Serializable{
 	
 	//Cost/Colour
 	int[] cost = new int[6];
-	final String[] colours = new String[]{"Colourless", "White", "Blue", "Black", "Red", "Green"};
+	
+	
+	static final String[] colours = new String[]{"Colourless", "White", "Blue", "Black", "Red", "Green"};
 	boolean[] colour = new boolean[] {true, false, false, false, false, false};
 	
 	//Type (Creature/Land/Instant/Sorcery/Enchantment/Artifact)
@@ -20,9 +24,10 @@ public class Card implements Serializable{
 	boolean entersTapped = false;
 	
 	//Image
-	Image pic;
+	ImageIcon pic;
 	
-	//Actives
+	//Active Ability
+	ArrayList<ActiveAbility> abilities = new ArrayList<ActiveAbility>();
 	
 	//Passives
 	
@@ -37,7 +42,7 @@ public class Card implements Serializable{
 		flavourText = "Flavour Text";
 	}
 	
-	Card(String nm, int[] cst, String type, String flavTxt, boolean tap, Image image){
+	Card(String nm, int[] cst, String type, String flavTxt, boolean tap, ImageIcon image){
 		name = nm;
 		cost = cst;
 		types.add(type);
@@ -74,6 +79,5 @@ public class Card implements Serializable{
 		}
 	}
 	
-	//Add active
 	//Add passive
 }

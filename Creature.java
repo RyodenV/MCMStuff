@@ -1,6 +1,7 @@
-import java.awt.Image;
 import java.io.Serializable;
 import java.util.ArrayList;
+
+import javax.swing.ImageIcon;
 
 @SuppressWarnings("serial")
 public class Creature extends Card implements Serializable{
@@ -9,10 +10,11 @@ public class Creature extends Card implements Serializable{
 	ArrayList<String> cType = new ArrayList<String>();
 	
 	//Perm and temp Pow+Tgh. Current HP and +1/+1 counters 
+	//Note: Temp Pow/Tgh, current HP, and one one counters don't get used except in the game, but they are added here in case we ever develope a functioning version of the game based on this code
 	int power, toughness, tempP, tempT, hp, oneones;
 	
 	//Keywords
-	static final String[] keywords = {"Vigilance","Haste", "LifeLink", "First Strike", "Double Strike", "Hexproof", "Flying", "Reach", "Deathtouch"};
+	static final String[] keywords = {"Vigilance","Haste", "LifeLink", "First Strike", "Double Strike", "Hexproof", "Flying", "Reach", "Deathtouch", "Unblockable", "Menace"};
 	ArrayList<Integer> activeKeywords = new ArrayList<Integer>(); 
 	
 	//Auras/Equipment
@@ -27,7 +29,7 @@ public class Creature extends Card implements Serializable{
 		oneones = 0;
 	}
 	
-	Creature(String nm, int[] cst, String type, String flavTxt, boolean tap, Image image, int pow, int tgh, int oo){
+	Creature(String nm, int[] cst, String type, String flavTxt, boolean tap, ImageIcon image, int pow, int tgh, int oo){
 		super(nm, cst, "Creature", flavTxt, tap, image);
 		cType.add(type);
 		power = pow;
