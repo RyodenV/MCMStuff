@@ -30,6 +30,7 @@ public class Card implements Serializable{
 	ArrayList<ActiveAbility> abilities = new ArrayList<ActiveAbility>();
 	
 	//Passives
+	ArrayList<PassiveAbility> passives = new ArrayList<PassiveAbility>();
 	
 	String flavourText;
 	
