@@ -12,7 +12,7 @@ public class DeckBuilderUI extends JFrame{
 	
 	ArrayList<CustomDeck> allDecks = new ArrayList<CustomDeck>();
 	CustomDeck tempDeck = new CustomDeck();
-	
+	int deckPos = -1; // IT'S INITIALIZED, STOP WHINING JCREATOR
 	
 	
 	JLabel displayCardBackground = new JLabel();
@@ -21,6 +21,8 @@ public class DeckBuilderUI extends JFrame{
 	JLabel displayCardImage = new JLabel();
 	JLabel displayCardAbilities = new JLabel();
 	JLabel displayCardText = new JLabel();
+	
+	JList deckCards = new JList();
 	
 	public DeckBuilderUI(){
 		
@@ -34,7 +36,6 @@ public class DeckBuilderUI extends JFrame{
 		JList allCards = new JList();
 		JButton addCardButton = new JButton("Add to Deck");
 		JButton saveDeck = new JButton("Save Deck");
-		JList deckCards = new JList();
 		String decksLabel[] = {"F","F","F","F","F","F","F","F","F","F"};
 		JList decksList = new JList(decksLabel);
 		
@@ -226,9 +227,6 @@ public class DeckBuilderUI extends JFrame{
 				tempDeck.cards.remove(deckCards.getSelectedIndex());
 				deckCards.setListData(tempDeck.sortAndExport());
 				deckCards.setVisibleRowCount(tempDeck.cards.size());
-				
-				removeCardButton.setEnabled(false);
-				
 			}
 		});
 		this.add(removeCardButton);
@@ -239,7 +237,17 @@ public class DeckBuilderUI extends JFrame{
 		saveDeck.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				tempDeck.name = deckName.getText();
-				
+				if(deckPos==-1){
+					allDecks.add(new CustomDeck(tempDeck));
+				}else{
+					allDecks.get(deckPos).name = tempDeck.name;
+					allDecks.get(deckPos).cards = tempDeck.cards;
+				}
+				String decksForDeckList[] = new String[allDecks.size()];
+				for(int i = 0;i<decksForDeckList.length;i++){
+					decksForDeckList[i] = allDecks.get(i).name;
+				}
+				decksList.setListData(decksForDeckList);
 			}
 		});
 		this.add(saveDeck);
@@ -256,7 +264,7 @@ public class DeckBuilderUI extends JFrame{
 				String testLabel[] = {"Decks","have","been","Touched","COLOURS","COLOURS","COLOURS","COLOURS","COLOURS","COLOURS"};
 				//deckCards.setListData(testLabel);
 				
-				removeCardButton.setEnabled(true);
+				removeCardButton.setEnabled(deckCards.getSelectedIndex()==-1);
 			}
 		});
 		JScrollPane deckPane = new JScrollPane(deckCards);
@@ -270,6 +278,16 @@ public class DeckBuilderUI extends JFrame{
 		JButton deleteDeck = new JButton("Delete Deck");
 		deleteDeck.setBounds(814,640,150,39);											// delete deck button
 		deleteDeck.setVisible(true);
+		deleteDeck.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				allDecks.remove(decksList.getSelectedIndex());
+				String decksForDeckList[] = new String[allDecks.size()];
+				for(int i = 0;i<decksForDeckList.length;i++){
+					decksForDeckList[i] = allDecks.get(i).name;
+				}
+				decksList.setListData(decksForDeckList);
+			}
+		});
 		this.add(deleteDeck);
 		deleteDeck.setEnabled(false);
 		JButton newDeck = new JButton("Create New Deck");
@@ -281,17 +299,35 @@ public class DeckBuilderUI extends JFrame{
 				deckName.setEditable(true);
 				tempDeck = new CustomDeck();
 				deckName.setText(tempDeck.name);
+				String clearingLabel[] = {"","","","","","","","","",""};
+				deckCards.setListData(clearingLabel);
+				deckPos = -1;
 			}
 		});
 		this.add(newDeck);
 		JButton loadDeck = new JButton("Load Deck");
 		loadDeck.setBounds(814,720,150,39);											// load deck button
 		loadDeck.setVisible(true);
+		loadDeck.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				saveDeck.setEnabled(true);
+				deckName.setEditable(true);
+				deckPos = decksList.getSelectedIndex();
+				tempDeck = allDecks.get(deckPos);
+				deckName.setText(tempDeck.name);
+				deckCards.setListData(tempDeck.sortAndExport());
+			}
+		});
 		this.add(loadDeck);
 		loadDeck.setEnabled(false);
 		JButton exportDecks = new JButton("Export Decks");
 		exportDecks.setBounds(814,760,150,39);											// export decks button
 		exportDecks.setVisible(true);
+		exportDecks.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				
+			}
+		});
 		this.add(exportDecks);
 		
 		
@@ -304,9 +340,8 @@ public class DeckBuilderUI extends JFrame{
 		decksList.setFixedCellWidth(200);											// decks list
 		decksList.addListSelectionListener(new ListSelectionListener(){
 			public void valueChanged(ListSelectionEvent e){
-				deleteDeck.setEnabled(true);
-				loadDeck.setEnabled(true);
-				setDisplayCard(tempDeck.cards.get(decksList.getSelectedIndex()));
+				deleteDeck.setEnabled(decksList.getSelectedIndex()==-1);
+				loadDeck.setEnabled(decksList.getSelectedIndex()==-1);
 			}
 		});
 		JScrollPane decksPane = new JScrollPane(decksList);
