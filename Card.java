@@ -50,6 +50,7 @@ public class Card implements Serializable{
 		flavourText = flavTxt;
 		entersTapped = tap;
 		pic = image;
+		this.setColours();
 	}
 	
 	//Set Colours
@@ -80,5 +81,27 @@ public class Card implements Serializable{
 		}
 	}
 	
-	//Add passive
+	//To String
+	public String toString() {
+		String out = this.name + " is a ";
+		String cost = "";
+		
+		
+		for(int i = 0; i < this.colour.length; i++) {
+			if(this.colour[i]) {
+				out += this.colours[i] + ", ";
+			}
+			if(this.cost[i] > 0) {
+				cost += this.cost[i] + " " + this.colours[i] + ", ";
+			}
+		}
+		
+		for(int i = 0; i < this.types.size(); i++) {
+			out += types.get(i) + ", ";
+		}
+		out += "that costs: " + cost;
+		out = out.substring(0, out.length() - 2) + ".";
+		
+		return out;
+	}
 }
